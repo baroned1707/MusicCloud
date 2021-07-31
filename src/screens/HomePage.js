@@ -5,22 +5,14 @@ import Menu from "../components/Menu";
 import Slider from "../components/Slider";
 
 //
-import { logo, search } from "../assets/import.js";
+import PlayAudio from "../components/PlayAudio";
+import Header from "../components/Header";
 
-const Home = () => {
+const HomePage = () => {
   return (
     <div className="container col">
-      <div className="col paddinghorizal">
-        <div className="row paddingvertical">
-          <div className="logocontainer row itemscenter width20">
-            <img src={logo} className="logo paddinghorizalS" />
-            <div className="tittleLogo h2 paddinghorizalS">MusCloud</div>
-          </div>
-          <div className="search row paddinghorizal paddingvertical itemscenter flex">
-            <img src={search} className="icon" />
-            <input className="input h2 placeholder paddinghorizalS flex" placeholder="Search for songs, album, etc ..." />
-          </div>
-        </div>
+      <div className="mainview col paddinghorizal scrolly">
+        <Header />
         <div className="row paddingvertical margintopS flex">
           <Menu />
           <div className="col width50 unresize">
@@ -39,9 +31,9 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="container col"></div>
+      <PlayAudio />
     </div>
   );
 };
 
-export default Home;
+export default HomePage;

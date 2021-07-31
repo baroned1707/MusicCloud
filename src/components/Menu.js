@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 //
-import { home, headphones, album, musicartists, like } from "../assets/import";
+import { home, headphones, album, musicartists, like } from "../assets/baseicon";
 
 const menu = [
   {

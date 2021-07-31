@@ -1,12 +1,17 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 //
-import { play, pause } from "../assets/import";
+import { play, pause } from "../assets/baseicon";
+import { SETPLAYNOW } from "../redux/action";
 
 const Track = () => {
+  const dispatch = useDispatch();
+
   const [state, setState] = useState(0);
 
   const handleSetPlay = () => {
+    dispatch({ type: SETPLAYNOW, value: "_8IGgO28wgE" });
     setState(!state);
   };
 
@@ -14,7 +19,7 @@ const Track = () => {
     <div className="track row itemscenter spacebetween paddingbottomS">
       <div className="row itemscenter">
         <img src={state == 0 ? play : pause} className="iconplaytrack pointer" style={{ left: -15 }} onClick={handleSetPlay} />
-        <div className="col paddingvertical">
+        <div className="col paddingvertical paddinghorizal">
           <div className="h5">{"On my way"}</div>
           <div className="h7 placeholder">{"Alan walker"}</div>
         </div>

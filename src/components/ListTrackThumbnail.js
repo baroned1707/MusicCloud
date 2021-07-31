@@ -6,7 +6,7 @@ const data = [
     name: "Tháng năm",
     singer: "Sobin Hoàng Sơn",
     thumbnail:
-      "https://i9.ytimg.com/s_p/RDCLAK5uy_nfs_t4FUu00E5ED6lveEBBX1VMYe1mFjk/mqdefault.jpg?sqp=CNy5j4gGir7X7AMGCPni-YEG&rs=AOn4CLD4XYjemZYnCy-fvs8MxXwM7aC-gg&v=1614705017",
+      "https://i.ytimg.com/vi/YEbz2Qt3vec/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLD0Le23f7uPo0xFWcoXeZpnCkU6SQ",
   },
 ];
 

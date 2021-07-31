@@ -12,13 +12,13 @@ import "./base/styles/responsive.scss";
 import "./base/styles/fonts.scss";
 import "./base/styles/element.scss";
 import "./base/styles/animation.scss";
+import "./base/styles/overwrite.scss";
+import "antd/dist/antd.css";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Router />
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Router />
+  </Provider>,
   document.getElementById("root")
 );
 

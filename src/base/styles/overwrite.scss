@@ -1,0 +1,10 @@
+@use 'base';
+
+.ant-slider-track {
+  background-color: base.$activeColor !important;
+}
+
+.ant-slider-handle {
+  background-color: base.$activeColor !important;
+  border-color: base.$activeColor !important;
+}
