@@ -1,0 +1,100 @@
+@use 'base';
+
+.logo {
+  width: base.$widthLogoS;
+  height: base.$heightLogoS;
+}
+
+.icon {
+  width: base.$widthIconS;
+  height: base.$heightIconS;
+}
+
+.input {
+  @extend .search;
+  outline: none;
+  border-width: 0px;
+  margin-left: 15px;
+}
+
+.search {
+  background-color: base.$backgroundColor;
+  border-radius: 30px;
+}
+
+.slider {
+  background-color: base.$backgroundColor;
+  padding-left: 50px;
+  overflow-x: hidden;
+}
+
+.activeslider {
+  background: base.$activeColor;
+  width: 40px;
+  height: 10px;
+  border-radius: 10px;
+  margin-right: 10px;
+  animation-name: activeslider;
+  animation-duration: 1s;
+}
+
+.unactiveslider {
+  @extend .activeslider;
+  background: base.$unactiveColor;
+  width: 20px;
+  height: 10px;
+  animation-name: unactiveslider;
+  animation-duration: 1s;
+}
+
+.content {
+  animation-name: showcontent;
+  animation-duration: 1s;
+}
+
+.nav {
+  margin-top: 20px;
+  margin-right: 20%;
+}
+
+.nav > div {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.thumbnail {
+  width: 30%;
+  max-width: 250px;
+  min-width: 170px;
+  object-fit: contain;
+}
+
+.iconplaytrack {
+  width: 15px;
+  height: 15px;
+  z-index: 2;
+}
+
+.track {
+  background-color: base.$backgroundColor;
+  border-radius: 20px;
+  padding-left: 15px;
+  min-height: 70px;
+  z-index: 1;
+}
+
+.track > div.row.itemscenter > div {
+  padding: 10px;
+}
+
+.listtrack {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  height: 0;
+}
+
+div.thumbnail > div {
+  flex-grow: 0;
+  flex-shrink: 0;
+}

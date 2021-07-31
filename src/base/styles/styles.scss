@@ -1,0 +1,166 @@
+@use 'base';
+
+.h2 {
+  font-size: base.$textSizeXL;
+  font-family: base.$primaryFont;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  color: base.$primaryTextColor;
+}
+
+.h1 {
+  @extend .h2;
+  font-size: base.$textSizeXXL;
+}
+
+.h3 {
+  @extend .h1;
+  font-size: base.$textSizeL;
+}
+
+.h5 {
+  @extend .h1;
+  font-size: base.$textSizeM;
+}
+
+.h6 {
+  @extend .h1;
+  font-size: base.$textSizeM - 3px;
+}
+
+.h7 {
+  @extend .h1;
+  font-size: base.$textSizeS;
+  font-weight: normal;
+}
+
+.placeholder {
+  color: base.$placeholderColor;
+}
+
+.container {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  justify-content: center;
+  align-items: center;
+}
+
+.spacebetween {
+  justify-content: space-between;
+}
+
+.itemscenter {
+  align-items: center;
+}
+
+.itemsstart {
+  align-items: flex-start;
+}
+
+.paddinghorizal {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.paddinghorizalS {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.paddingvertical {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.width20 {
+  width: 20%;
+}
+
+.width50 {
+  width: 50%;
+}
+
+.width30 {
+  width: 30%;
+}
+
+.width80 {
+  width: 100%;
+}
+
+.flex {
+  flex: 1;
+}
+
+.textleft {
+  text-align: left;
+}
+
+.borderradiusS {
+  border-radius: 30px;
+}
+
+.active {
+  background: base.$activeColor;
+}
+
+.margintopS {
+  margin-top: 20px;
+}
+
+.marginleftS {
+  margin-left: 10px;
+}
+
+.marginrightS {
+  margin-right: 10px;
+}
+
+.marginrightM {
+  margin-right: 30px;
+}
+
+.paddingbottomS {
+  margin-bottom: 20px;
+}
+
+.paddingrightS {
+  padding-right: 5px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.opacity6 {
+  opacity: 0.5;
+}
+
+.scrollx {
+  overflow-x: scroll;
+}
+
+.scrolly {
+  overflow-y: scroll;
+}
+
+.unresize {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.inline {
+  display: inline;
+}

@@ -1,0 +1,34 @@
+@use 'base';
+
+@keyframes activeslider {
+  from {
+    width: 20px;
+    background-color: base.$unactiveColor;
+  }
+  to {
+    width: 40px;
+    background-color: base.$activeColor;
+  }
+}
+
+@keyframes unactiveslider {
+  from {
+    width: 40px;
+    background-color: base.$activeColor;
+  }
+  to {
+    width: 20px;
+    background-color: base.$unactiveColor;
+  }
+}
+
+@keyframes showcontent {
+  from {
+    opacity: 0;
+    transform: translateX(10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

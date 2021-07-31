@@ -1,0 +1,9 @@
+export const logo = require("./icons/logo.svg").default;
+export const search = require("./icons/search.svg").default;
+export const home = require("./icons/home.svg").default;
+export const album = require("./icons/album.svg").default;
+export const headphones = require("./icons/headphones.svg").default;
+export const musicartists = require("./icons/musicartists.svg").default;
+export const like = require("./icons/like.svg").default;
+export const play = require("./icons/play.svg").default;
+export const pause = require("./icons/pause.svg").default;
