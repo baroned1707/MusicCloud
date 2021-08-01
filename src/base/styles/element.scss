@@ -95,7 +95,7 @@
 }
 
 .playaudio {
-  height: 80px;
+  height: 85px;
   position: absolute;
   bottom: 0px;
 }
@@ -129,4 +129,15 @@
 
 .controlrange {
   width: 150px;
+}
+
+.containerpositon {
+  position: absolute;
+  z-index: 3;
+  width: 100vw;
+  height: 100vh;
+}
+
+.backgroundpositon {
+  background-color: rgba(211, 216, 224, 0.5);
 }

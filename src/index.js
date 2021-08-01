@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import Loading from "./screens/Loading";
 import Router from "./screens/Router";
 import { Provider } from "react-redux";
 import { store } from "./redux/stores";
@@ -18,6 +19,7 @@ import "antd/dist/antd.css";
 ReactDOM.render(
   <Provider store={store}>
     <Router />
+    <Loading />
   </Provider>,
   document.getElementById("root")
 );

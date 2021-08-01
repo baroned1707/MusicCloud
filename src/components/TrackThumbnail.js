@@ -1,13 +1,13 @@
 import React from "react";
 
-const TrackThumbnail = ({ name, singer, thumbnail }) => {
+const TrackThumbnail = ({ name, singer, thumbnail, callback }) => {
   return (
-    <div className="thumbnail col flex margintopS unresize marginrightM">
+    <div className="thumbnail col flex margintopS unresize marginrightM pointer" onClick={callback}>
       <img src={thumbnail} className="thumbnail" />
-      <div className="row spacebetween paddingvertical">
+      <div className="row spacebetween paddingvertical textoverdot">
         <div className="col">
-          <div className="h5">{name}</div>
-          <div className="h7 placeholder">{singer}</div>
+          <div className="h5 textoverdot">{name}</div>
+          <div className="h7 placeholder textoverdot">{singer}</div>
         </div>
       </div>
     </div>

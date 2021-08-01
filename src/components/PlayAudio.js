@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Slider } from "antd";
-import { handleGetTrack } from "../api/get";
+import { endpoint, handleGetTrack } from "../api/get";
 import { coverSecToMinute } from "../base/function";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SETLOADING } from "../redux/action";
 
 //
 import {
@@ -17,11 +18,14 @@ import {
   addplaylist,
   download,
 } from "../assets/baseicon";
+import { host } from "../api/host";
 
 var tempCount = 0;
 var countTime = 0;
 
 const PlayAudio = () => {
+  const dispatch = useDispatch();
+
   const playNow = useSelector((state) => state.control.playNow);
 
   const [process, setProcess] = useState(0);
@@ -33,6 +37,7 @@ const PlayAudio = () => {
   const [downProcess, setDownProcess] = useState(0);
   const [toltalSec, setToltalSec] = useState(0);
   const [time, setTime] = useState(0);
+  const [urlDownload, setUrlDownload] = useState(null);
 
   const handlePlay = () => {
     if (audioCtx == null) return;
@@ -49,9 +54,11 @@ const PlayAudio = () => {
   const handleCreateAudio = async (link) => {
     const audioContext = new AudioContext();
     var result = null;
+    dispatch({ type: SETLOADING, value: true });
     await handleGetTrack(link, setDownProcess).then((res) => {
       result = res;
     });
+    dispatch({ type: SETLOADING, value: false });
     var tempAudio = await audioContext.decodeAudioData(result);
     var gainNode = audioContext.createGain();
     gainNode.gain.value = volume / 100;
@@ -117,6 +124,16 @@ const PlayAudio = () => {
     gain.gain.value = e / 100;
   };
 
+  const handleDownload = () => {
+    if (playNow == null) {
+      setUrlDownload(null);
+      return;
+    }
+    var url = host + endpoint.downloadTrack + `?link=${playNow}&name=${"track"}.mp3`;
+    console.log(url);
+    setUrlDownload(url);
+  };
+
   useEffect(() => {
     handleRenderDownProcess();
   }, [downProcess]);
@@ -127,6 +144,7 @@ const PlayAudio = () => {
 
   useEffect(() => {
     handleReadPlay();
+    handleDownload();
   }, [playNow]);
 
   return (
@@ -171,7 +189,9 @@ const PlayAudio = () => {
           </div>
           <img className="controlicon paddinghorizalS pointer" src={likeplace} />
           <img className="controlicon paddinghorizalS pointer" src={addplaylist} />
-          <img className="controlicon paddinghorizalS pointer" src={download} />
+          <a href={urlDownload} download target="_blank">
+            <img className="controlicon paddinghorizalS pointer" src={download} />
+          </a>
         </div>
       </div>
     </div>

@@ -1,34 +1,35 @@
-import React from "react";
-import ListTrack from "../components/ListTrack";
-import ListTrackThumbnail from "../components/ListTrackThumbnail";
+import React, { useEffect, useState } from "react";
 import Menu from "../components/Menu";
-import Slider from "../components/Slider";
+import { useSelector } from "react-redux";
 
 //
 import PlayAudio from "../components/PlayAudio";
 import Header from "../components/Header";
+import Content from "../components/Content";
+import SearchResult from "../components/SearchResult";
 
 const HomePage = () => {
+  const resultSearch = useSelector((state) => state.data.resultSearch);
+
+  const [renderContent, setRenderContent] = useState(<Content />);
+
+  const handleRenderResultSearch = () => {
+    if (resultSearch.length != 0) {
+      setRenderContent(<SearchResult />);
+    }
+  };
+
+  useEffect(() => {
+    handleRenderResultSearch();
+  }, [resultSearch]);
+
   return (
-    <div className="container col">
+    <div className="containerpositon container col">
       <div className="mainview col paddinghorizal scrolly">
         <Header />
         <div className="row paddingvertical margintopS flex">
           <Menu />
-          <div className="col width50 unresize">
-            <div className="col flex unresize">
-              <div className="h1">Albums</div>
-              <Slider />
-            </div>
-            <div className="col flex margintopS unresize">
-              <div className="h1">Recently Added</div>
-              <ListTrackThumbnail />
-            </div>
-          </div>
-          <div className="col width30 paddinghorizalS unresize">
-            <div className="h1 paddinghorizal">Top Trending</div>
-            <ListTrack />
-          </div>
+          {renderContent}
         </div>
       </div>
       <PlayAudio />

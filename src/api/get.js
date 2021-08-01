@@ -1,8 +1,10 @@
 import { host } from "./host";
 import axios from "axios";
 
-const endpoint = {
+export const endpoint = {
   getTrack: "/api/track/gettrack",
+  getSearch: "/api/track/search",
+  downloadTrack: "/api/track/download",
 };
 
 export const handleGetTrack = async (link, setDownProcess) => {
@@ -14,4 +16,21 @@ export const handleGetTrack = async (link, setDownProcess) => {
     },
   });
   return result.data ? result.data : null;
+};
+
+export const handleGetSearch = async (keywork) => {
+  var url = host + endpoint.getSearch + `?keywork=${keywork}`;
+  var result = {};
+  await axios
+    .get(url)
+    .then((res) => {
+      result = res;
+    })
+    .catch((e) => {
+      result = {
+        status: false,
+        data: [],
+      };
+    });
+  return result.data;
 };
