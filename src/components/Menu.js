@@ -38,7 +38,7 @@ const Menu = () => {
     menu.map((cur, i) => {
       temprender.push(
         <div
-          className={`nav row itemscenter borderradiusS paddinghorizal paddingvertical flex pointer unresize ${
+          className={`nav row container center borderradiusS paddinghorizal paddingvertical flex pointer unresize ${
             active == i ? "active" : ""
           }`}
           onClick={() => {

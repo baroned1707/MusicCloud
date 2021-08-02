@@ -8,15 +8,70 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .playcontainerres2 {
+    display: none;
+  }
+
+  .search {
+    height: 50px;
+    width: 80% !important;
+  }
+
+  .logo {
+    width: base.$widthLogoS !important;
+    height: base.$heightLogoS !important;
+  }
+
+  .paddinghorizalS {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .playcontrolres {
+    width: 100% !important;
+  }
+
+  .h2 {
+    font-size: base.$textSizeM;
+  }
+
+  .icon {
+    width: base.$widthIconS;
+    height: base.$heightIconS;
+  }
+
+  .paddinghorizal {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .nav {
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+  }
+
+  .logocontainer {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 1024px) {
 }
 
 @media only screen and (max-width: 1280px) {
+  .playcontainerres1 {
+    display: none;
+  }
+
+  .playcontrolres {
+    width: 50%;
+  }
+
   .tittleLogo {
     display: none;
   }
+
   .nav {
     justify-content: center;
   }

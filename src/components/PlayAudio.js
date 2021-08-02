@@ -52,6 +52,14 @@ const PlayAudio = () => {
   };
 
   const handleCreateAudio = async (link) => {
+    var AudioContext =
+      window.AudioContext || // Default
+      window.webkitAudioContext || // Safari and old versions of Chrome
+      false;
+    if (AudioContext == false) {
+      alert("Browser not support Play Audio !");
+      return;
+    }
     const audioContext = new AudioContext();
     var result = null;
     dispatch({ type: SETLOADING, value: true });
@@ -156,24 +164,26 @@ const PlayAudio = () => {
         <div className="line" style={{ width: `${process}%` }}></div>
       </div>
       <div className="row paddinghorizal itemscenter flex">
-        <div className="row itemscenter">
-          <img
-            src={
-              "https://i.ytimg.com/vi/doLMt10ytHY/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDttAE1bETokvyMUTSqxuNMlEmvVA"
-            }
-            className="thumbnailplay"
-          />
-          <div className="col paddingvertical paddinghorizal">
-            <div className="h5">{"On my way"}</div>
-            <div className="h7 placeholder">{"Alan walker"}</div>
+        <div className="playcontainerres1 row itemscenter flex">
+          <div className="row itemscenter">
+            <img
+              src={
+                "https://i.ytimg.com/vi/doLMt10ytHY/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDttAE1bETokvyMUTSqxuNMlEmvVA"
+              }
+              className="thumbnailplay"
+            />
+            <div className="col paddingvertical paddinghorizal">
+              <div className="h5">{"On my way"}</div>
+              <div className="h7 placeholder">{"Alan walker"}</div>
+            </div>
+          </div>
+          <div className="row paddinghorizalS">
+            <div className="h7 placeholder">{coverSecToMinute(time)}</div>
+            <div className="h7 placeholder paddinghorizalS">{"-"}</div>
+            <div className="h7 placeholder">{coverSecToMinute(toltalSec)}</div>
           </div>
         </div>
-        <div className="row paddinghorizalS">
-          <div className="h7 placeholder">{coverSecToMinute(time)}</div>
-          <div className="h7 placeholder paddinghorizalS">{"-"}</div>
-          <div className="h7 placeholder">{coverSecToMinute(toltalSec)}</div>
-        </div>
-        <div className="row paddinghorizal itemscenter width30 spacebetween">
+        <div className="playcontrolres row paddinghorizal itemscenter width30 spacebetween">
           <img className="controlicon paddinghorizalS pointer" src={replay} />
           <img className="controlicon paddinghorizalS pointer" src={prev} />
           <div className="col buttonplay center pointer" onClick={handlePlay}>
@@ -182,7 +192,7 @@ const PlayAudio = () => {
           <img className="controlicon paddinghorizalS pointer" src={next} />
           <img className="controlicon paddinghorizalS pointer" src={playrandom} />
         </div>
-        <div className="row paddinghorizal itemscenter flex spacebetween">
+        <div className="playcontainerres2 row paddinghorizal itemscenter flex spacebetween">
           <div className="row itemscenter">
             <img className="controlicon paddinghorizalS pointer" src={sound} />
             <Slider className="controlrange" defaultValue={100} max={100} min={0} onChange={handleChangeVolume} />

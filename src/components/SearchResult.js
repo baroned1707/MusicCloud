@@ -32,7 +32,7 @@ const SearchResult = () => {
     return temprender;
   };
 
-  return <div className="row width80 wrap">{handleRenderResult()}</div>;
+  return <div className="row width80 wrap center">{handleRenderResult()}</div>;
 };
 
 export default SearchResult;

@@ -11,7 +11,7 @@ import SearchResult from "../components/SearchResult";
 const HomePage = () => {
   const resultSearch = useSelector((state) => state.data.resultSearch);
 
-  const [renderContent, setRenderContent] = useState(<Content />);
+  const [renderContent, setRenderContent] = useState(<SearchResult />);
 
   const handleRenderResultSearch = () => {
     if (resultSearch.length != 0) {
