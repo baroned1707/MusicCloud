@@ -27,10 +27,7 @@ const HomePage = () => {
     <div className="containerpositon container col">
       <div className="mainview col paddinghorizal scrolly">
         <Header />
-        <div className="row paddingvertical margintopS flex">
-          <Menu />
-          {renderContent}
-        </div>
+        <div className="row paddingvertical margintopS flex">{renderContent}</div>
       </div>
       <PlayAudio />
     </div>

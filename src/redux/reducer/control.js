@@ -2,7 +2,12 @@ import { SETPLAYNOW } from "../action";
 
 const defaultStore = {
   playList: [],
-  playNow: null,
+  playNow: {
+    title: null,
+    description: null,
+    thumbnail: null,
+    link: null,
+  },
 };
 
 const control = (state = defaultStore, action) => {

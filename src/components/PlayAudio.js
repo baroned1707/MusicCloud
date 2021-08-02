@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Slider } from "antd";
 import { endpoint, handleGetTrack } from "../api/get";
 import { coverSecToMinute } from "../base/function";
@@ -20,154 +20,115 @@ import {
 } from "../assets/baseicon";
 import { host } from "../api/host";
 
-var tempCount = 0;
-var countTime = 0;
-
 const PlayAudio = () => {
   const dispatch = useDispatch();
 
+  const refAudio = useRef();
   const playNow = useSelector((state) => state.control.playNow);
 
   const [process, setProcess] = useState(0);
   const [state, setState] = useState(0);
   const [volume, setVolume] = useState(100);
-  const [audio, setAudio] = useState(null);
-  const [audioCtx, setAudioCtx] = useState(null);
-  const [gain, setGain] = useState(null);
+  const [link, setLink] = useState(null);
   const [downProcess, setDownProcess] = useState(0);
   const [toltalSec, setToltalSec] = useState(0);
   const [time, setTime] = useState(0);
-  const [urlDownload, setUrlDownload] = useState(null);
+  const [urlDownload, setUrlDownload] = useState("");
+
+  const handleCreateAudio = () => {
+    try {
+      if (!playNow.link) return;
+
+      dispatch({ type: SETLOADING, value: true });
+      var url = host + endpoint.getTrack + `?link=${playNow.link}`;
+
+      //event progress
+      refAudio.current.addEventListener("progress", handleOnProgress);
+
+      //event canplay audio
+      refAudio.current.addEventListener("canplay", handleOnCanPlay);
+
+      //event playing
+      refAudio.current.addEventListener("timeupdate", handleOnTimeUpdate);
+
+      document.addEventListener("touchstart", handlePlay, false);
+
+      setLink(url);
+    } catch (e) {
+      alert(e.message);
+      dispatch({ type: SETLOADING, value: false });
+    }
+  };
+
+  const handlePlay = () => {
+    refAudio.current.play();
+  };
+
+  const handlePause = () => {
+    refAudio.current.pause();
+  };
+
+  const handleOnProgress = () => {
+    try {
+      var buffered = refAudio.current.buffered;
+      var buffered_end = buffered.end(0);
+      var progress = (buffered_end / refAudio.current.duration) * 100;
+      if (process == 100) {
+        setDownProcess(0);
+      } else {
+        setDownProcess(progress);
+      }
+    } catch {
+      console.log("Fail");
+    }
+  };
+
+  const handleOnCanPlay = () => {
+    refAudio.current.play();
+    setState(1);
+    setToltalSec(refAudio.current.duration);
+    handleDownload();
+    dispatch({ type: SETLOADING, value: false });
+  };
+
+  const handleOnTimeUpdate = () => {
+    var time = parseInt(refAudio.current.currentTime);
+    var duration = refAudio.current.duration;
+    var tempProcess = (time / duration) * 100;
+    setTime(time);
+    setProcess(tempProcess);
+    console.log(tempProcess);
+  };
+
+  const handleChangeVolume = (e) => {
+    setVolume(e);
+    refAudio.current.volume = e / 100;
+  };
 
   const handleChangeState = () => {
-    if (state == 0) {
-      handlePlay();
-    } else {
+    if (state) {
       handlePause();
+    } else {
+      handlePlay();
     }
     setState(!state);
   };
 
-  const handlePlay = () => {
-    if (audioCtx == null) return;
-    console.log("Play");
-    handleStartCount();
-    audioCtx.resume();
-  };
-
-  const handlePause = () => {
-    if (audioCtx == null) return;
-    console.log("Pause");
-    handleEndCount();
-    audioCtx.suspend();
-  };
-
-  const handleCreateAudio = async (link) => {
-    try {
-      handleEndCount();
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      dispatch({ type: SETLOADING, value: true });
-      var result = await handleGetTrack(link, setDownProcess);
-      dispatch({ type: SETLOADING, value: false });
-      var tempAudio = await audioContext.decodeAudioData(result, (audioBuffer) => {
-        console.log(audioBuffer);
-        tempAudio = audioBuffer;
-      });
-      //set Toltal Time Audio
-      setToltalSec(tempAudio.duration);
-
-      //create GainNode
-      var gainNode = audioContext.createGain();
-      gainNode.gain.value = volume / 100;
-
-      //create Source
-      const source = audioContext.createBufferSource();
-      source.buffer = tempAudio;
-      source.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      source.connect(gainNode);
-      source.start();
-
-      //set Variable
-      await setAudio(source);
-      await setAudioCtx(audioContext);
-      await setGain(gainNode);
-      handlePlay();
-    } catch (e) {
-      alert(e);
-    }
-  };
-
-  const handleRenderDownProcess = () => {
-    if (downProcess === 100) {
-      console.log("Done");
-      handleStartCount();
-      setDownProcess(0);
-    }
-  };
-
-  const handleStartCount = async () => {
-    countTime = await setInterval(async () => {
-      tempCount = tempCount + 1;
-      setTime(tempCount);
-    }, 1000);
-    console.log(countTime);
-  };
-
-  const handleEndCount = () => {
-    console.log(countTime);
-    clearInterval(countTime);
-  };
-
-  const handleRenderProcess = () => {
-    setProcess((time / toltalSec) * 100);
-  };
-
-  const handleReadPlay = () => {
-    if (playNow != null) {
-      handleCreateAudio(playNow).then(() => {
-        tempCount = 0;
-      });
-      setState(1);
-      if (audio != null) {
-        audio.stop();
-      }
-    } else {
-      console.log("Not found playNow");
-    }
-  };
-
-  const handleChangeVolume = (e) => {
-    setVolume(e / 100);
-    if (gain == null) return;
-    gain.gain.value = e / 100;
-  };
-
   const handleDownload = () => {
-    if (playNow == null) {
-      setUrlDownload(null);
+    if (!playNow.link) {
+      setUrlDownload("");
       return;
     }
-    var url = host + endpoint.downloadTrack + `?link=${playNow}&name=${"track"}.mp3`;
-    console.log(url);
+    var url = host + endpoint.downloadTrack + `?link=${playNow.link}&name=${playNow.description}`;
     setUrlDownload(url);
   };
 
-  useEffect(() => {
-    handleRenderDownProcess();
-  }, [downProcess]);
+  useEffect(() => {}, [downProcess]);
+
+  useEffect(() => {}, [time]);
 
   useEffect(() => {
-    handleRenderProcess();
-  }, [time]);
-
-  useEffect(() => {
-    handlePlay();
-  }, [audio]);
-
-  useEffect(() => {
-    handleReadPlay();
-    handleDownload();
+    handleCreateAudio();
   }, [playNow]);
 
   return (
@@ -181,15 +142,10 @@ const PlayAudio = () => {
       <div className="row paddinghorizal itemscenter flex">
         <div className="playcontainerres1 row itemscenter flex">
           <div className="row itemscenter">
-            <img
-              src={
-                "https://i.ytimg.com/vi/doLMt10ytHY/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDttAE1bETokvyMUTSqxuNMlEmvVA"
-              }
-              className="thumbnailplay"
-            />
-            <div className="col paddingvertical paddinghorizal">
-              <div className="h5">{"On my way"}</div>
-              <div className="h7 placeholder">{"Alan walker"}</div>
+            <img src={playNow.thumbnail} className="thumbnailplay" alt="" />
+            <div className="col paddingvertical paddinghorizalS" style={{ maxWidth: 180 }}>
+              <div className="h5 textoverdot">{playNow.description}</div>
+              <div className="h7 placeholder textoverdot">{playNow.title}</div>
             </div>
           </div>
           <div className="row paddinghorizalS">
@@ -198,6 +154,7 @@ const PlayAudio = () => {
             <div className="h7 placeholder">{coverSecToMinute(toltalSec)}</div>
           </div>
         </div>
+        <audio ref={refAudio} src={link}></audio>
         <div className="playcontrolres row paddinghorizal itemscenter width30 spacebetween">
           <img className="controlicon paddinghorizalS pointer" src={replay} />
           <img className="controlicon paddinghorizalS pointer" src={prev} />
@@ -214,7 +171,7 @@ const PlayAudio = () => {
           </div>
           <img className="controlicon paddinghorizalS pointer" src={likeplace} />
           <img className="controlicon paddinghorizalS pointer" src={addplaylist} />
-          <a href={urlDownload} download target="_blank">
+          <a download target="_blank" href={urlDownload}>
             <img className="controlicon paddinghorizalS pointer" src={download} />
           </a>
         </div>

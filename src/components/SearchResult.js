@@ -8,9 +8,9 @@ const SearchResult = () => {
 
   const resultSearch = useSelector((state) => state.data.resultSearch);
 
-  const callback = (link) => {
-    console.log(link);
-    dispatch({ type: SETPLAYNOW, value: link });
+  const callback = (object) => {
+    console.log(object);
+    dispatch({ type: SETPLAYNOW, value: object });
   };
 
   const handleRenderResult = () => {
@@ -22,7 +22,7 @@ const SearchResult = () => {
           name={cur.description}
           singer={cur.title}
           callback={() => {
-            callback(cur.link);
+            callback(cur);
           }}
           key={i}
           thumbnail={cur.thumbnail}
