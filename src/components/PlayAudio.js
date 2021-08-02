@@ -56,7 +56,7 @@ const PlayAudio = () => {
       window.AudioContext || // Default
       window.webkitAudioContext || // Safari and old versions of Chrome
       false;
-    if (AudioContext == false) {
+    if (!AudioContext) {
       alert("Browser not support Play Audio !");
       return;
     }
@@ -76,7 +76,7 @@ const PlayAudio = () => {
     source.connect(gainNode);
     gainNode.connect(audioContext.destination);
     source.connect(gainNode);
-    source.start();
+    source.start(0);
     source.addEventListener("ended", () => {
       setState(0);
       tempCount = 0;

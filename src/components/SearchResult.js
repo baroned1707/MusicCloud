@@ -32,7 +32,7 @@ const SearchResult = () => {
     return temprender;
   };
 
-  return <div className="row width80 wrap justifycenter scrolly">{handleRenderResult()}</div>;
+  return <div className="row width80 wrap justifycenter itemsstart">{handleRenderResult()}</div>;
 };
 
 export default SearchResult;
