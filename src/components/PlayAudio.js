@@ -39,52 +39,63 @@ const PlayAudio = () => {
   const [time, setTime] = useState(0);
   const [urlDownload, setUrlDownload] = useState(null);
 
-  const handlePlay = () => {
-    if (audioCtx == null) return;
+  const handleChangeState = () => {
     if (state == 0) {
-      handleStartCount();
-      audioCtx.resume();
+      handlePlay();
     } else {
-      handleEndCount();
-      audioCtx.suspend();
+      handlePause();
     }
     setState(!state);
   };
 
+  const handlePlay = () => {
+    if (audioCtx == null) return;
+    console.log("Play");
+    handleStartCount();
+    audioCtx.resume();
+  };
+
+  const handlePause = () => {
+    if (audioCtx == null) return;
+    console.log("Pause");
+    handleEndCount();
+    audioCtx.suspend();
+  };
+
   const handleCreateAudio = async (link) => {
-    var AudioContext =
-      window.AudioContext || // Default
-      window.webkitAudioContext || // Safari and old versions of Chrome
-      false;
-    if (!AudioContext) {
-      alert("Browser not support Play Audio !");
-      return;
-    }
-    const audioContext = new AudioContext();
-    var result = null;
-    dispatch({ type: SETLOADING, value: true });
-    await handleGetTrack(link, setDownProcess).then((res) => {
-      result = res;
-    });
-    dispatch({ type: SETLOADING, value: false });
-    var tempAudio = await audioContext.decodeAudioData(result);
-    var gainNode = audioContext.createGain();
-    gainNode.gain.value = volume / 100;
-    setToltalSec(tempAudio.duration);
-    const source = audioContext.createBufferSource();
-    source.buffer = tempAudio;
-    source.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    source.connect(gainNode);
-    source.start(0);
-    source.addEventListener("ended", () => {
-      setState(0);
-      tempCount = 0;
+    try {
       handleEndCount();
-    });
-    await setAudio(source);
-    await setAudioCtx(audioContext);
-    await setGain(gainNode);
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      dispatch({ type: SETLOADING, value: true });
+      var result = await handleGetTrack(link, setDownProcess);
+      dispatch({ type: SETLOADING, value: false });
+      var tempAudio = await audioContext.decodeAudioData(result, (audioBuffer) => {
+        console.log(audioBuffer);
+        tempAudio = audioBuffer;
+      });
+      //set Toltal Time Audio
+      setToltalSec(tempAudio.duration);
+
+      //create GainNode
+      var gainNode = audioContext.createGain();
+      gainNode.gain.value = volume / 100;
+
+      //create Source
+      const source = audioContext.createBufferSource();
+      source.buffer = tempAudio;
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      source.connect(gainNode);
+      source.start();
+
+      //set Variable
+      await setAudio(source);
+      await setAudioCtx(audioContext);
+      await setGain(gainNode);
+      handlePlay();
+    } catch (e) {
+      alert(e);
+    }
   };
 
   const handleRenderDownProcess = () => {
@@ -151,6 +162,10 @@ const PlayAudio = () => {
   }, [time]);
 
   useEffect(() => {
+    handlePlay();
+  }, [audio]);
+
+  useEffect(() => {
     handleReadPlay();
     handleDownload();
   }, [playNow]);
@@ -186,7 +201,7 @@ const PlayAudio = () => {
         <div className="playcontrolres row paddinghorizal itemscenter width30 spacebetween">
           <img className="controlicon paddinghorizalS pointer" src={replay} />
           <img className="controlicon paddinghorizalS pointer" src={prev} />
-          <div className="col buttonplay center pointer" onClick={handlePlay}>
+          <div className="col buttonplay center pointer" onClick={handleChangeState}>
             <img className="controlicon paddinghorizalS" src={state == 0 ? playwhite : pausewhite} />
           </div>
           <img className="controlicon paddinghorizalS pointer" src={next} />
