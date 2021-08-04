@@ -6,7 +6,7 @@ const defaultStore = {
     title: null,
     description: null,
     thumbnail: null,
-    link: null,
+    link: "1oMgxa32A7g",
   },
 };
 

@@ -1,19 +1,57 @@
-export const logo = require("./icons/logo.svg").default;
-export const search = require("./icons/search.svg").default;
-export const home = require("./icons/home.svg").default;
-export const album = require("./icons/album.svg").default;
-export const headphones = require("./icons/headphones.svg").default;
-export const musicartists = require("./icons/musicartists.svg").default;
-export const like = require("./icons/like.svg").default;
-export const play = require("./icons/play.svg").default;
-export const pause = require("./icons/pause.svg").default;
-export const replay = require("./icons/replay.svg").default;
-export const prev = require("./icons/prev.svg").default;
-export const playwhite = require("./icons/playwhite.svg").default;
-export const pausewhite = require("./icons/pausewhite.svg").default;
-export const next = require("./icons/next.svg").default;
-export const playrandom = require("./icons/playrandom.svg").default;
-export const sound = require("./icons/sound.svg").default;
-export const likeplace = require("./icons/likeplace.svg").default;
-export const addplaylist = require("./icons/addplaylist.svg").default;
-export const download = require("./icons/download.svg").default;
+import logo from "./icons/logo.svg";
+import search from "./icons/search.svg";
+import home from "./icons/home.svg";
+import album from "./icons/album.svg";
+import headphones from "./icons/headphones.svg";
+import musicartists from "./icons/musicartists.svg";
+import like from "./icons/like.svg";
+import play from "./icons/play.svg";
+import playblack from "./icons/playblack.svg";
+import pause from "./icons/pause.svg";
+import pauseblack from "./icons/pauseblack.svg";
+import replay from "./icons/replay.svg";
+import prev from "./icons/prev.svg";
+import prewhite from "./icons/prewhite.svg";
+import playwhite from "./icons/playwhite.svg";
+import pausewhite from "./icons/pausewhite.svg";
+import next from "./icons/next.svg";
+import nextwhite from "./icons/nextwhite.svg";
+import playrandom from "./icons/playrandom.svg";
+import sound from "./icons/sound.svg";
+import likeplace from "./icons/likeplace.svg";
+import addplaylist from "./icons/addplaylist.svg";
+import download from "./icons/download.svg";
+import downarrow from "./icons/downarrow.svg";
+import playlist from "./icons/playlist.svg";
+import heartwhite from "./icons/heartwhite.svg";
+import heartactive from "./icons/heartactive.svg";
+
+export {
+  logo,
+  search,
+  home,
+  album,
+  headphones,
+  musicartists,
+  like,
+  play,
+  pause,
+  replay,
+  prev,
+  playrandom,
+  playwhite,
+  next,
+  pausewhite,
+  sound,
+  likeplace,
+  addplaylist,
+  download,
+  downarrow,
+  playlist,
+  heartwhite,
+  heartactive,
+  playblack,
+  pauseblack,
+  prewhite,
+  nextwhite,
+};
