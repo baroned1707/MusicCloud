@@ -1,3 +1,6 @@
-export const SETPLAYNOW = "SETPLAYNOW";
+export const SETPLAYLIST = "SETPLAYLIST";
 export const SETRESULTSEARCH = "SETRESULTSEARCH";
 export const SETLOADING = "SETLOADING";
+export const ADDPLAYLIST = "ADDPLAYLIST";
+export const SETNEXT = "SETNEXT";
+export const SETPREV = "SETPREV";

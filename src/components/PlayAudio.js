@@ -1,32 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Slider } from "antd";
-import { endpoint, handleGetTrack } from "../api/get";
+import { endpoint } from "../api/get";
 import { coverSecToMinute } from "../base/function";
 import { useDispatch, useSelector } from "react-redux";
-import { SETLOADING } from "../redux/action";
+import { SETLOADING, SETNEXT, SETPREV } from "../redux/action";
 import { host } from "../api/host";
 
 //
 import {
   replay,
-  prev,
   playwhite,
   pausewhite,
-  next,
   playrandom,
-  sound,
-  likeplace,
-  addplaylist,
-  download,
   downarrow,
   playlist,
-  heartwhite,
-  heartactive,
   prewhite,
   pauseblack,
   nextwhite,
   playblack,
 } from "../assets/baseicon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const tempimg =
   "https://i.ytimg.com/vi/sG9JhIRuTkA/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCnJKPjz8ir69uBjnio-QD8j5JnTg";
@@ -35,8 +29,14 @@ const PlayAudio = () => {
   const dispatch = useDispatch();
 
   const refAudio = useRef();
-  const playNow = useSelector((state) => state.control.playNow);
+  const refControl = useRef();
+  const refMiniControl = useRef();
 
+  const playList = useSelector((state) => state.control.playList);
+  const indexPlay = useSelector((state) => state.control.indexPlay);
+
+  const [playNow, setPlayNow] = useState(indexPlay != null ? playList[indexPlay] : null);
+  const [active, setActive] = useState(0);
   const [process, setProcess] = useState(0);
   const [state, setState] = useState(0);
   const [volume, setVolume] = useState(100);
@@ -46,10 +46,29 @@ const PlayAudio = () => {
   const [time, setTime] = useState(0);
   const [urlDownload, setUrlDownload] = useState("");
 
+  const handleActive = () => {
+    refControl.current.style.animationName = "showcontrol";
+    refControl.current.style.animationDuration = "0.5s";
+    refAudio.current.style.animationPlayState = "running";
+    setActive(1);
+  };
+
+  const handleUnActive = () => {
+    refControl.current.style.animationName = "hiddencontrol";
+    refControl.current.style.animationDuration = "0.5s";
+    refAudio.current.style.animationPlayState = "running";
+    setTimeout(() => {
+      setActive(0);
+    }, 200);
+  };
+
   const handleCreateAudio = async () => {
     try {
-      if (!playNow.link) return;
+      if (!playNow) return;
       // dispatch({ type: SETLOADING, value: true });
+      setProcess(0);
+      setDownProcess(0);
+      setState(0);
       var url = host + endpoint.getTrack + `?link=${playNow.link}`;
       await setLink(url);
 
@@ -129,7 +148,7 @@ const PlayAudio = () => {
   };
 
   const handleDownload = () => {
-    if (!playNow.link) {
+    if (!playNow) {
       setUrlDownload("");
       return;
     }
@@ -137,48 +156,95 @@ const PlayAudio = () => {
     setUrlDownload(url);
   };
 
+  const handleNext = () => {
+    dispatch({ type: SETNEXT });
+  };
+
+  const handlePrev = () => {
+    dispatch({ type: SETPREV });
+  };
+
+  const handleChangePlayNow = () => {
+    if (indexPlay == null) return;
+    setPlayNow(playList[indexPlay]);
+  };
+
   useEffect(() => {
     handleCreateAudio();
   }, [playNow]);
 
+  useEffect(() => {
+    handleChangePlayNow();
+  }, [indexPlay, playList]);
+
   return (
-    <div className="container mx-auto min-h-screen flex flex-col bg-black justify-between">
-      <div className="flex flex-col">
-        <div className="decor absolute z-1 inset-0 rounded-br-3xl"></div>
-        <div className="flex my-8 z-10">
-          <img src={downarrow} className="icon mx-8" />
-          <div className="flex-1 font-sans subpixel-antialiased font-medium text-lg text-center">{"PLAYING NOW"}</div>
-          <img src={playlist} className="icon mx-8" />
-        </div>
-        <img src={tempimg} className="thumbnail self-center rounded-3xl shadow-2xl z-10" />
-        <div className="flex justify-between items-center px-10">
-          <div className="flex flex-col my-8">
-            <div className="text-3xl font-sans font-medium text-white">Last Dance</div>
-            <div className="text-xl font-sans font-medium text-gray-400">Rhye</div>
+    <>
+      <div
+        className="container mx-auto min-h-screen flex flex-col bg-black justify-between absolute inset-0"
+        hidden={active == 0 ? true : false}
+        ref={refControl}
+      >
+        <div className="flex flex-col">
+          <div className="decor absolute z-1 inset-0 rounded-br-3xl"></div>
+          <div className="flex my-8 z-10">
+            <img src={downarrow} className="icon mx-8" onClick={handleUnActive} />
+            <div className="flex-1 font-sans subpixel-antialiased font-medium text-lg text-center">{"PLAYING NOW"}</div>
+            <img src={playlist} className="icon mx-8" />
           </div>
-          <img src={heartactive} className="icon" />
+          <img src={playNow.thumbnail} className="thumbnail self-center rounded-3xl shadow-2xl z-10" />
+          <div className="flex justify-between items-center px-10">
+            <div className="flex flex-col my-8 mr-6 flex-auto w-0 ">
+              <div className="text-xl font-sans font-medium text-white truncate">{playNow.description}</div>
+              <div className="text-lg font-sans font-medium text-gray-400 truncate">{playNow.title}</div>
+            </div>
+            <FontAwesomeIcon icon={faHeart} className="text-3xl text-white" />
+          </div>
+        </div>
+        <div className="flex flex-col my-16">
+          <div className="flex px-10 flex-col justify-between items-center">
+            <Slider className="container" max={toltalSec} min={0} step={1} value={time} />
+            <div className="container flex justify-between items-center">
+              <div className="text-x font-sans font-medium text-gray-400">{coverSecToMinute(time)}</div>
+              <div className="text-x font-sans font-medium text-gray-400">{coverSecToMinute(toltalSec)}</div>
+            </div>
+          </div>
+          <div className="container flex justify-between items-center px-10">
+            <img src={playrandom} className="controlicon" />
+            <img src={prewhite} className="controlicon" onClick={handlePrev} />
+            <div className="control flex justify-center items-center" onClick={handleChangeState}>
+              <img src={state == 1 ? pauseblack : playblack} className="icon" />
+            </div>
+            <img src={nextwhite} className="controlicon" onClick={handleNext} />
+            <img src={replay} className="controlicon" />
+          </div>
         </div>
       </div>
-      <div className="flex flex-col my-16">
-        <audio src={link} ref={refAudio}></audio>
-        <div className="flex px-10 flex-col justify-between items-center">
-          <Slider className="container" max={toltalSec} min={0} step={1} value={time} />
-          <div className="container flex justify-between items-center">
-            <div className="text-x font-sans font-medium text-gray-400">{coverSecToMinute(time)}</div>
-            <div className="text-x font-sans font-medium text-gray-400">{coverSecToMinute(toltalSec)}</div>
+      <div className="w-full flex flex-col justify-between  bg-black" hidden={active == 0 ? false : true} ref={refMiniControl}>
+        <div className="w-full flex h-16 justify-between bg-black">
+          <div className="flex" onClick={handleActive}>
+            <img src={playNow.thumbnail} />
+            <div className="flex flex-col flex-auto w-0 justify-center pl-2 overflow-hidden">
+              <div className="text-xl font-sans text-white truncate">{playNow.description}</div>
+              <div className="text-lg font-sans text-gray-400 truncate">{playNow.title}</div>
+            </div>
           </div>
+          <img src={state == 1 ? pausewhite : playwhite} className="h-2/5 mx-6 self-center" onClick={handleChangeState} />
         </div>
-        <div className="container flex justify-between items-center px-10">
-          <img src={playrandom} className="controlicon" />
-          <img src={prewhite} className="controlicon" />
-          <div className="control flex justify-center items-center" onClick={handleChangeState}>
-            <img src={state == 1 ? pauseblack : playblack} className="icon" />
-          </div>
-          <img src={nextwhite} className="controlicon" />
-          <img src={replay} className="controlicon" />
-        </div>
+        <div
+          className="bg-white h-1 my-1 rounded"
+          style={{
+            width: `${downProcess}%`,
+          }}
+        ></div>
+        <div
+          className="bg-white h-1 my-1 rounded"
+          style={{
+            width: `${process}%`,
+          }}
+        ></div>
       </div>
-    </div>
+      <audio src={link} ref={refAudio}></audio>
+    </>
   );
 };
 

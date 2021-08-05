@@ -32,3 +32,21 @@
     transform: translateX(0);
   }
 }
+
+@keyframes showcontrol {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes hiddencontrol {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
